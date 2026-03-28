@@ -48,4 +48,29 @@ df["env_norm"] = (df["EPI"] - df["EPI"].min()) / (df["EPI"].max() - df["EPI"].mi
 df["weighted"] = df['startup_norm'] * 0.3 + df['digital_norm'] * 0.3 + df['ai_norm'] * 0.3 + df['env_norm'] * 0.1
 df = df.sort_values(by='weighted', ascending=False, ignore_index=True)
 
+table_columns_keep = ['country','weighted', 'startup_norm', 'digital_norm', 'ai_norm', 'env_norm']
+table_df = df[table_columns_keep]
+table_df = table_df.rename(columns={'country': 'Country', 'weighted': 'Overall Score', 'startup_norm':
+    'Startup Environment', 'digital_norm': 'Firm Digitalization', 'ai_norm': 'Firm AI Adoption', 'env_norm': 'Environmental Sustainability'})
+
 print(df.head(30))
+
+fig, ax = plt.subplots(figsize=(12, 5))
+ax.axis('off')
+table = ax.table(cellText=table_df.values, colLabels=table_df.columns, loc='center')
+
+columns = len(table_df.iloc[0,:])
+
+header_colors = ["#FFFFFF", "#2F4B7C", "#F8961E", "#277DA1", "#9D4EDD", "#43AA8B"]
+
+for i in range(columns):
+    header = table[0, i]
+    header.set_facecolor(header_colors[i])
+    if i == 0:
+        header.set_text_props(weight='bold')
+    else:
+        header.set_text_props(color="white", weight="bold")
+
+# fig.savefig("startup_analysis.png", dpi=300, bbox_inches='tight')
+
+plt.show()
