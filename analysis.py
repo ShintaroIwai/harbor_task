@@ -17,7 +17,7 @@ digital_df = digital_df[digital_columns_keep]
 digital_df['OBS_VALUE'] = pd.to_numeric(digital_df['OBS_VALUE'], errors='coerce')
 digital_df = digital_df.dropna()
 digital_df = digital_df[digital_df['TIME_PERIOD'].isin([2025])]
-digital_df = digital_df[digital_df['Size classes in number of persons employed'].str.contains("From 10 to 249 persons employed")]
+digital_df = digital_df[digital_df['Size classes in number of persons employed'].str.contains("10 persons employed or more")]
 digital_df = digital_df[digital_df['Information society indicator'].str.contains('Enterprises with at least basic level of digital intensity')]
 digital_df = digital_df.loc[:, ['Geopolitical entity (reporting)', 'OBS_VALUE']]
 digital_df.columns = ["country", "digitalization"]
@@ -71,6 +71,6 @@ for i in range(columns):
     else:
         header.set_text_props(color="white", weight="bold")
 
-# fig.savefig("analysis.png", dpi=300, bbox_inches='tight')
+fig.savefig("analysis.png", dpi=300, bbox_inches='tight')
 
 plt.show()
