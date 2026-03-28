@@ -71,6 +71,6 @@ for i in range(columns):
     else:
         header.set_text_props(color="white", weight="bold")
 
-# fig.savefig("startup_analysis.png", dpi=300, bbox_inches='tight')
+# fig.savefig("analysis.png", dpi=300, bbox_inches='tight')
 
 plt.show()
