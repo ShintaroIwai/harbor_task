@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 env_df = pd.read_csv("epi2024results.csv")
 env_columns_keep = ['country', 'EPI.new']
 env_df = env_df[env_columns_keep]
-env_df = env_df.sort_values(by=['EPI.new'], ascending=False, ignore_index= True)
+env_df = env_df.rename(columns = {'EPI.new': 'EPI'})
+# env_df = env_df.sort_values(by=['EPI'], ascending=False, ignore_index= True)
 
 # digitalization index
 digital_df = pd.read_csv("isoc_e_dii.csv")
@@ -34,10 +35,17 @@ ai_df.columns = ["country", "AI adoption"]
 startup_df = pd.read_csv("Global Startup Ecosystem Index.csv")
 startup_columns_keep = ['Country', 'Total Score']
 startup_df = startup_df[startup_columns_keep]
-startup_df = startup_df.rename(columns={"Country": "country"})
+startup_df = startup_df.rename(columns={"Country": "country", "Total Score":"startup environment"})
 
 df = startup_df.merge(digital_df, on='country')
 df = df.merge(ai_df, on='country')
 df = df.merge(env_df, on='country')
+
+df["startup_norm"] = (df['startup environment'] - df['startup environment'].min()) / (df['startup environment'].max() - df['startup environment'].min())
+df["digital_norm"] = (df["digitalization"] - df["digitalization"].min()) / (df["digitalization"].max() - df["digitalization"].min())
+df["ai_norm"] = (df["AI adoption"] - df["AI adoption"].min()) / (df["AI adoption"].max() - df["AI adoption"].min())
+df["env_norm"] = (df["EPI"] - df["EPI"].min()) / (df["EPI"].max() - df["EPI"].min())
+df["weighted"] = df['startup_norm'] * 0.3 + df['digital_norm'] * 0.3 + df['ai_norm'] * 0.3 + df['env_norm'] * 0.1
+df = df.sort_values(by='weighted', ascending=False, ignore_index=True)
 
 print(df.head(30))
